@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  sam3:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: sam3:latest
+    container_name: sam3-app
+    runtime: nvidia
+    
+    # GPU support
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - CUDA_VISIBLE_DEVICES=0
+      # Hugging Face token (can be overridden by --env flag or env file)
+      - HF_TOKEN=${HF_TOKEN:-}
+      - HF_HOME=/root/.cache/huggingface
+    
+    # Mount volumes
+    volumes:
+      # Mount local workspace into container
+      - ./data:/workspace/data
+      - ./notebooks:/workspace/notebooks
+      - ./output:/workspace/output
+      # Persist Hugging Face cache across containers
+      - hf_cache:/root/.cache/huggingface
+    
+    # Keep container running
+    stdin_open: true
+    tty: true
+    
+    # Working directory
+    working_dir: /workspace
+    
+    # Override default command to be interactive
+    command: /bin/bash
+
+# Named volume for persisting Hugging Face cache
+volumes:
+  hf_cache:
+    driver: local
