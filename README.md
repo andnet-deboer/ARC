@@ -1,4 +1,6 @@
-#  ARC  
+<div align="center">
+
+# **ARC**  
 ### Aligned Reconstruction for Contact Grasping
 
 *Intelligent 3D reconstruction and robotic grasping from a single image.*
@@ -7,7 +9,8 @@
 [![Docker](https://img.shields.io/badge/docker-ready-green)](https://www.docker.com/)
 [![License](https://img.shields.io/badge/license-MIT-orange)](LICENSE)
 
----
+</div>
+
 
 
 ![ARC Demo](arc.gif)
