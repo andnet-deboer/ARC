@@ -15,7 +15,6 @@
 
 ![ARC Demo](arc.gif)
 
-Intelligent 3D object reconstruction and segmentation for robotic grasping and manipulation.
 
 ## Overview
 
