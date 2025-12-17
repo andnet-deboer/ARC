@@ -5,7 +5,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: sam3:latest
+      args:
+        HF_TOKEN: ${HF_TOKEN}
+    image: sam3d-sam3-depth:latest
     container_name: sam3-app
     runtime: nvidia
     
@@ -13,30 +15,21 @@ services:
     environment:
       - NVIDIA_VISIBLE_DEVICES=all
       - CUDA_VISIBLE_DEVICES=0
-      # Hugging Face token (can be overridden by --env flag or env file)
-      - HF_TOKEN=${HF_TOKEN:-}
       - HF_HOME=/root/.cache/huggingface
     
     # Mount volumes
     volumes:
-      # Mount local workspace into container
       - ./data:/workspace/data
       - ./notebooks:/workspace/notebooks
       - ./output:/workspace/output
-      # Persist Hugging Face cache across containers
-      - hf_cache:/root/.cache/huggingface
+      - ./.cache/huggingface:/root/.cache/huggingface
     
     # Keep container running
     stdin_open: true
     tty: true
     
     # Working directory
-    working_dir: /workspace
+    working_dir: /app
     
-    # Override default command to be interactive
-    command: /bin/bash
-
-# Named volume for persisting Hugging Face cache
-volumes:
-  hf_cache:
-    driver: local
+    # Start servers instead of bash
+    command: bash -c "python sam3d_server.py & python sam3_server.py & python depth_anything_v3_server.py & wait"

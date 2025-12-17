@@ -123,19 +123,19 @@ health: ## Check health of all services
 
 test-sam3: ## Test SAM3 server with test.jpg
 	@echo "$(BLUE)Testing SAM3 segmentation...$(NC)"
-	python3 client.py --image test.jpg --sam3
+	python3 arc_client.py --image test.jpg --sam3
 
 test-depth: ## Test Depth Anything V3 with test.jpg
 	@echo "$(BLUE)Testing Depth Anything V3...$(NC)"
-	python3 client.py --image test.jpg --depth
+	python3 arc_client.py --image test.jpg --depth
 
 test-sam3d: ## Test SAM3D 3D reconstruction with test.jpg
 	@echo "$(BLUE)Testing SAM3D reconstruction...$(NC)"
-	python3 client.py --image test.jpg --sam3d
+	python3 arc_client.py --image test.jpg --sam3d
 
 test-all: ## Test all models with test.jpg
 	@echo "$(BLUE)Testing all models...$(NC)"
-	python3 client.py --image test.jpg --all
+	python3 arc_client.py --image test.jpg --all
 
 # Development workflow targets
 dev: build up ## Build and start containers (development setup)
@@ -159,4 +159,70 @@ quickstart: setup build up health ## Quick start - setup, build, and run
 	@echo "  make test-all      - Test all models with test.jpg"
 	@echo "  make shell         - Enter the container"
 	@echo "  make logs          - View container logs"
+	@echo ""
+
+client: ## Setup Python venv, install dependencies, and run client
+	@echo "$(BLUE)========================================$(NC)"
+	@echo "$(BLUE)Setting up Client Environment$(NC)"
+	@echo "$(BLUE)========================================$(NC)"
+	@echo ""
+	@if [ -z "$(SERVER_IP)" ]; then \
+		SERVER_IP=localhost; \
+		echo "$(YELLOW)Note: SERVER_IP not provided, using default 'localhost'$(NC)"; \
+	else \
+		echo "$(YELLOW)Using SERVER_IP: $(SERVER_IP)$(NC)"; \
+	fi
+	@echo ""
+	@echo "$(BLUE)Step 1/4: Creating Python virtual environment...$(NC)"
+	@if [ -d ".venv" ]; then \
+		echo "$(YELLOW)Virtual environment already exists at .venv$(NC)"; \
+	else \
+		python3 -m venv .venv; \
+		echo "$(GREEN)✓ Virtual environment created$(NC)"; \
+	fi
+	@echo ""
+	@echo "$(BLUE)Step 2/4: Activating virtual environment...$(NC)"
+	@. .venv/bin/activate && echo "$(GREEN)✓ Virtual environment activated$(NC)" || true
+	@echo ""
+	@echo "$(BLUE)Step 3/4: Installing client dependencies...$(NC)"
+	@. .venv/bin/activate && pip install --upgrade pip > /dev/null 2>&1
+	@. .venv/bin/activate && pip install requests pillow numpy opencv-python open3d > /dev/null 2>&1
+	@echo "$(GREEN)✓ Dependencies installed:$(NC)"
+	@echo "  - requests"
+	@echo "  - pillow"
+	@echo "  - numpy"
+	@echo "  - opencv-python"
+	@echo "  - open3d"
+	@echo ""
+	@echo "$(BLUE)Step 4/4: Running client...$(NC)"
+	@echo ""
+	@. .venv/bin/activate && python3 arc_client.py --server-ip $(SERVER_IP) --image test.jpg --all
+	@echo ""
+	@echo "$(GREEN)✓ Client test complete!$(NC)"
+	@echo ""
+
+client-shell: ## Activate venv and open interactive shell for manual testing
+	@echo "$(BLUE)Activating Python virtual environment...$(NC)"
+	@. .venv/bin/activate && bash
+	@echo "$(BLUE)Deactivated virtual environment$(NC)"
+
+client-install: ## Just install client dependencies (without running)
+	@echo "$(BLUE)Setting up client dependencies...$(NC)"
+	@if [ -d ".venv" ]; then \
+		echo "$(YELLOW)Virtual environment already exists$(NC)"; \
+	else \
+		echo "Creating virtual environment..."; \
+		python3 -m venv .venv; \
+	fi
+	@echo "$(BLUE)Installing dependencies...$(NC)"
+	@. .venv/bin/activate && pip install --upgrade pip > /dev/null 2>&1
+	@. .venv/bin/activate && pip install requests pillow numpy opencv-python open3d
+	@echo "$(GREEN)✓ Client dependencies installed$(NC)"
+	@echo "$(YELLOW)Activate venv with: source .venv/bin/activate$(NC)"
+	@echo ""
+
+client-clean: ## Remove venv and client files
+	@echo "$(BLUE)Removing client virtual environment...$(NC)"
+	@rm -rf .venv
+	@echo "$(GREEN)✓ Virtual environment removed$(NC)"
 	@echo ""
