@@ -180,10 +180,32 @@ make down && make up
 
 ## Citation
 
-This project integrates:
-- [SAM 3D Objects](https://github.com/facebookresearch/sam-3d-objects)
-- [SAM 3](https://github.com/facebookresearch/sam3)
-- [Depth Anything V3](https://github.com/ByteDance-Seed/depth-anything-3)
+@article{sam3dteam2025sam3d3dfyimages,
+      title={SAM 3D: 3Dfy Anything in Images}, 
+      author={SAM 3D Team and Xingyu Chen and Fu-Jen Chu and Pierre Gleize and Kevin J Liang and Alexander Sax and Hao Tang and Weiyao Wang and Michelle Guo and Thibaut Hardin and Xiang Li and Aohan Lin and Jiawei Liu and Ziqi Ma and Anushka Sagar and Bowen Song and Xiaodong Wang and Jianing Yang and Bowen Zhang and Piotr Dollár and Georgia Gkioxari and Matt Feiszli and Jitendra Malik},
+      year={2025},
+      eprint={2511.16624},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2511.16624}, 
+}
+
+@misc{carion2025sam3segmentconcepts,
+      title={SAM 3: Segment Anything with Concepts},
+      author={Nicolas Carion and Laura Gustafson and Yuan-Ting Hu and Shoubhik Debnath and Ronghang Hu and Didac Suris and Chaitanya Ryali and Kalyan Vasudev Alwala and Haitham Khedr and Andrew Huang and Jie Lei and Tengyu Ma and Baishan Guo and Arpit Kalla and Markus Marks and Joseph Greer and Meng Wang and Peize Sun and Roman Rädle and Triantafyllos Afouras and Effrosyni Mavroudi and Katherine Xu and Tsung-Han Wu and Yu Zhou and Liliane Momeni and Rishi Hazra and Shuangrui Ding and Sagar Vaze and Francois Porcher and Feng Li and Siyuan Li and Aishwarya Kamath and Ho Kei Cheng and Piotr Dollár and Nikhila Ravi and Kate Saenko and Pengchuan Zhang and Christoph Feichtenhofer},
+      year={2025},
+      eprint={2511.16719},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2511.16719},
+}
+
+@article{depthanything3,
+  title={Depth Anything 3: Recovering the visual space from any views},
+  author={Haotong Lin and Sili Chen and Jun Hao Liew and Donny Y. Chen and Zhenyu Li and Guang Shi and Jiashi Feng and Bingyi Kang},
+  journal={arXiv preprint arXiv:2511.10647},
+  year={2025}
+}
 
 ## License
 
