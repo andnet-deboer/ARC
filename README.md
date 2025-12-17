@@ -1,4 +1,10 @@
-# ARC | Aligned Reconstruction for Contact Grasping
+# ARC  
+### Aligned Reconstruction for Contact Grasping
+
+[![Python](https://img.shields.io/badge/python-3.10+-blue)](https://www.python.org/) 
+[![Docker](https://img.shields.io/badge/docker-ready-green)](https://www.docker.com/)
+[![License](https://img.shields.io/badge/license-MIT-orange)](LICENSE)
+
 
 ![ARC Demo](arc.gif)
 
