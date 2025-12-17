@@ -17,7 +17,7 @@ services:
       - CUDA_VISIBLE_DEVICES=0
       - HF_HOME=/root/.cache/huggingface
     
-    # Mount volumes
+    # Mount volumes (using bind mounts instead of named volumes)
     volumes:
       - ./data:/workspace/data
       - ./notebooks:/workspace/notebooks
