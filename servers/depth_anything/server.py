@@ -18,12 +18,9 @@ import cv2
 os.environ.setdefault("CONDA_PREFIX", "/opt/conda")
 os.environ.setdefault("CUDA_HOME", "/usr/local/cuda")
 
-DEPTH_ROOT = "/opt/depth_anything_v3"
-if DEPTH_ROOT not in sys.path:
-    sys.path.insert(0, DEPTH_ROOT)
-
 try:
-    from depth_anything_v3.dpt import DepthAnythingV3
+    from depth_anything_3.api import DepthAnything3
+
 except ImportError as e:
     print(f"Error importing Depth Anything V3: {e}")
     print("Make sure Depth Anything V3 is installed in /opt/depth_anything_v3")
@@ -39,20 +36,16 @@ def load_model():
     if depth_model is None:
         print("Loading Depth Anything V3 model...")
         try:
-            # Initialize model - using medium model by default
-            depth_model = DepthAnythingV3(
-                encoder='vit_base',  # or 'vit_small', 'vit_large'
-                features=256,
-                out_channels=[96, 192, 384, 768]
+            # Recommended nested model
+            depth_model = DepthAnything3.from_pretrained(
+                "depth-anything/DA3NESTED-GIANT-LARGE"
             )
-            depth_model.cuda()
+            depth_model = depth_model.cuda()
             depth_model.eval()
             print("✓ Depth Anything V3 model loaded successfully!")
-            
         except Exception as e:
             print(f"✗ Failed to load Depth Anything V3: {e}")
             traceback.print_exc()
-    
     return depth_model
 
 @app.route('/health', methods=['GET'])

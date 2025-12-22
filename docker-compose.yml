@@ -1,35 +1,54 @@
-version: '3.8'
-
 services:
-  sam3:
+  sam3d:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: servers/sam3d/Dockerfile
       args:
         HF_TOKEN: ${HF_TOKEN}
-    image: sam3d-sam3-depth:latest
-    container_name: sam3-app
     runtime: nvidia
-    
-    # GPU support
     environment:
       - NVIDIA_VISIBLE_DEVICES=all
       - CUDA_VISIBLE_DEVICES=0
-      - HF_HOME=/root/.cache/huggingface
-    
-    # Mount volumes (using bind mounts instead of named volumes)
-    volumes:
-      - ./data:/workspace/data
-      - ./notebooks:/workspace/notebooks
-      - ./output:/workspace/output
-      - ./.cache/huggingface:/root/.cache/huggingface
-    
-    # Keep container running
-    stdin_open: true
-    tty: true
-    
-    # Working directory
-    working_dir: /app
-    
-    # Start servers instead of bash
-    command: bash -c "python sam3d_server.py & python sam3_server.py & python depth_anything_v3_server.py & wait"
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
+  sam3:
+    build:
+      context: .
+      dockerfile: servers/sam3/Dockerfile
+      args:
+        HF_TOKEN: ${HF_TOKEN}
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - CUDA_VISIBLE_DEVICES=0
+    ports:
+      - "8001:8001"
+    restart: unless-stopped
+
+  depth:
+    build:
+      context: .
+      dockerfile: servers/depth_anything/Dockerfile
+      args:
+        HF_TOKEN: ${HF_TOKEN}
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - CUDA_VISIBLE_DEVICES=0
+    ports:
+      - "8002:8002"
+    restart: unless-stopped
+
+  cgn:
+    build:
+      context: .
+      dockerfile: servers/contact_graspnet/Dockerfile
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - CUDA_VISIBLE_DEVICES=0
+    ports:
+      - "8003:8003"
+    restart: unless-stopped
